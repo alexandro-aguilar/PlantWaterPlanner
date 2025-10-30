@@ -12,13 +12,12 @@ export default abstract class BaseLambdaFunction extends Function {
     super(scope, id, {
       ...props,
       code:
-        Environment.stage === 'local'
-          ? Code.fromBucket(Bucket.fromBucketName(scope, 'HotReloadBucket', 'hot-reload'), props.code as string)
+        Environment.current.STAGE === 'local'
+          ? Code.fromBucket(Bucket.fromBucketName(scope, `${id}HotReloadBucket`, 'hot-reload'), props.code as string)
           : Code.fromAsset(props.code as string),
       environment: {
-        PROJECT_NAME: Environment.projectName,
-        STAGE: Environment.projectName,
-        POWERTOOLS_LOG_LEVEL: Environment.projectName,
+        PROJECT_NAME: Environment.current.PROJECT_NAME,
+        STAGE: Environment.current.STAGE,
         ...props.environment,
       },
       tracing: Tracing.ACTIVE,

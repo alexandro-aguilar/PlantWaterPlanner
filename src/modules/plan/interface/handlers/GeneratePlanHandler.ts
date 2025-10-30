@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2, Context } from 'aws-lambda';
 import ILogger from '../../../../core/utils/ILogger';
 import TracerService from '../../../../core/utils/TracerService';

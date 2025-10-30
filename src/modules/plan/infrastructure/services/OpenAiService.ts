@@ -1,6 +1,8 @@
 import { OpenAI } from 'openai';
 import Environment from '../../../../core/utils/Environment';
+import { injectable } from 'inversify';
 
+@injectable()
 export default class OpenAiService {
   private openAiClient: OpenAI;
 
@@ -32,8 +34,6 @@ Devuelve fechas ISO (YYYY-MM-DD) para last_watered y next_watering si aplica.`,
                   properties: {
                     name: { type: 'string' },
                     frequency_days: { type: 'integer' },
-                    last_watered: { type: 'string' },
-                    next_watering: { type: 'string' },
                   },
                   required: ['name', 'frequency_days'],
                   additionalProperties: false,
