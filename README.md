@@ -53,12 +53,17 @@ A CDK-based infrastructure project for managing plant watering schedules. This p
    - Stop and remove any existing LocalStack containers
    - Start LocalStack and PostgreSQL using Docker Compose
 
-2. **Bootstrap CDK for LocalStack** (first time only)
+2. **Run transpiler in watch mode for hot-reload and deployment**
+   ```bash
+   yarn deploy:local
+   ```
+
+3. **Bootstrap CDK for LocalStack** (first time only)
    ```bash
    yarn bootstrap:local
    ```
 
-3. **Deploy to LocalStack**
+4. **Deploy to LocalStack**
    ```bash
    yarn deploy:local
    ```
