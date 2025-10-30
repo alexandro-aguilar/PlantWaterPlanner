@@ -1,12 +1,14 @@
 import { S3Client, GetObjectCommand, GetObjectCommandInput } from '@aws-sdk/client-s3';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import Environment from '../../../../core/utils/Environment';
+import { types } from '../../config/types';
+import ILogger from '../../../../core/utils/ILogger';
 
 @injectable()
 export default class S3Service {
   private s3Client: S3Client;
 
-  constructor() {
+  constructor(@inject(types.Logger) private logger: ILogger) {
     this.s3Client = new S3Client({
       region: Environment.AWS_REGION,
     });
@@ -29,6 +31,7 @@ export default class S3Service {
       const response = await this.s3Client.send(command);
 
       if (!response.Body) {
+        this.logger.error(`No body in S3 response for key: ${key}`);
         throw new Error(`File not found: ${key} in bucket: ${Environment.S3_BUCKET_NAME}`);
       }
 
@@ -42,6 +45,7 @@ export default class S3Service {
         stream.on('end', () => resolve(Buffer.concat(chunks)));
       });
     } catch (error) {
+      this.logger.error(`Error downloading file from S3: ${error}`);
       throw new Error(`Failed to download file from S3: ${error}`);
     }
   }
@@ -53,8 +57,13 @@ export default class S3Service {
    * @returns Promise<string> - The file content as base64 string
    */
   async downloadFileAsBase64(key: string): Promise<string> {
-    const buffer = await this.downloadFile(key);
-    return buffer.toString('base64');
+    try {
+      const buffer = await this.downloadFile(key);
+      return buffer.toString('base64');
+    } catch (error) {
+      this.logger.error(`Error downloading file as base64 from S3: ${error}`);
+      throw new Error(`Failed to download file as base64 from S3: ${error}`);
+    }
   }
 
   /**

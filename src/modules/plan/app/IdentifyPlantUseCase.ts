@@ -14,9 +14,11 @@ export default class IdentifyPlanUseCase {
 
   async execute(plantUrl: string): Promise<string> {
     try {
-      this.logger.info('IdentifyPlanUseCase', { plantUrl });
+      this.logger.info('IdentifyPlanUseCase starting', { plantUrl });
+
       const imageBase64 = await this.s3Service.downloadFileAsBase64(plantUrl);
-      this.logger.info('IdentifyPlanUseCase', { imageBase64Length: imageBase64.length });
+      this.logger.info('Image downloaded successfully', { imageBase64Length: imageBase64.length });
+
       const identificationResult = await this.plantImageAnalizeOpenAi.identifyPlants(imageBase64);
       return JSON.parse(identificationResult);
     } catch (error) {

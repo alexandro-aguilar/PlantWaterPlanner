@@ -27,7 +27,6 @@ export default class IdentifyPlantLambda extends BaseLambdaFunction {
         // LocalStack-specific environment variables
         ...(Environment.current.STAGE === 'local' && {
           NODE_TLS_REJECT_UNAUTHORIZED: '0',
-          AWS_ENDPOINT_URL: 'http://localhost:4566',
         }),
       },
     });

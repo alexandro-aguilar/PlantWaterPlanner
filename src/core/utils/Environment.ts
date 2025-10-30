@@ -12,9 +12,6 @@ export default class Environment {
     if (Environment.STAGE === 'local') {
       // Disable TLS verification for LocalStack
       process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
-      // Set LocalStack endpoints if needed
-      process.env.AWS_ENDPOINT_URL = process.env.AWS_ENDPOINT_URL || 'http://localhost:4566';
     }
   }
 }
