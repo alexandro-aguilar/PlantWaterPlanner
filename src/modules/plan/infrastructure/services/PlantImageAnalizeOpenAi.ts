@@ -13,11 +13,10 @@ export default class OpenAiVisionService {
   }
 
   private async analyzeImage(imageBase64: string, prompt: string): Promise<string> {
-    this.logger.info('apikey', { key: Environment.OPENAI_API_KEY });
-    this.logger.info('Analyzing image with OpenAI Vision API');
     try {
       const response = await this.openAiClient.chat.completions.create({
         model: 'gpt-4o',
+        response_format: { type: 'json_object' },
         messages: [
           {
             role: 'user',
@@ -37,7 +36,6 @@ export default class OpenAiVisionService {
         ],
         max_tokens: 1000,
       });
-      this.logger.info('Analysis', { response });
       return response.choices[0]?.message?.content ?? '';
     } catch (error) {
       this.logger.error('Error analyzeImage:', { error });
@@ -48,26 +46,25 @@ export default class OpenAiVisionService {
   async identifyPlants(imageBase64: string): Promise<string> {
     try {
       this.logger.info('imageBase64 Analize', { length: imageBase64.length });
-      const prompt = `Analiza esta imagen e identifica todas las plantas que puedas ver. 
-  Para cada planta proporciona:
-  - Nombre común y científico si es posible
-  - Recomendaciones de riego (frecuencia en días)
-  - Estado aparente de la planta (saludable, necesita agua, etc.)
+      const prompt = `Analyze this image and identify just a plant. 
+  Respond strictly in **English**.
+  For the identified plant provide:
+  - Common name and scientific name if possible
+  - Watering recommendations (frequency in days)
+  - Apparent condition of the plant (healthy, needs water, etc.)
   
-  Devuelve la respuesta en formato JSON con la siguiente estructura:
+  Return the response in JSON format with the following structure:
   {
-    "plants": [
-      {
-        "name": "string",
-        "scientific_name": "string",
-        "watering_frequency_days": number,
-        "current_condition": "string",
-        "care_notes": "string"
-      }
-    ]
+    "plant": {
+      "name": "string",
+      "scientific_name": "string",
+      "watering_frequency_days": number,
+      "current_condition": "string",
+      "care_notes": "string"
+    }
   }`;
-
-      return await this.analyzeImage(imageBase64, prompt);
+      const response = await this.analyzeImage(imageBase64, prompt);
+      return response;
     } catch (error) {
       this.logger.error('Error in identifyPlants:', { error });
       throw error;
