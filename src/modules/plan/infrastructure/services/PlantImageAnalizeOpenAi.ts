@@ -49,15 +49,19 @@ export default class OpenAiVisionService {
       const prompt = `Analyze this image and identify just a plant. 
   Respond strictly in **English**.
   For the identified plant provide:
-  - Common name and scientific name if possible
+  - Common name
+  - Scientific name
+  - Sunlight preference (e.g., full sun, partial sun, shade)
   - Watering recommendations (frequency in days)
   - Apparent condition of the plant (healthy, needs water, etc.)
+  - Short care notes (tips to keep it healthy)
   
   Return the response in JSON format with the following structure:
   {
     "plant": {
       "name": "string",
       "scientific_name": "string",
+      "sunlight_preference": "string",
       "watering_frequency_days": number,
       "current_condition": "string",
       "care_notes": "string"

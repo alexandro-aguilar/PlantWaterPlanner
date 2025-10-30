@@ -14,13 +14,12 @@ export default class IdentifyPlanUseCase {
 
   async execute(plantUrl: string): Promise<string> {
     try {
-      this.logger.info('IdentifyPlanUseCase starting', { plantUrl });
-
       const imageBase64 = await this.s3Service.downloadFileAsBase64(plantUrl);
-      this.logger.info('Image downloaded successfully', { imageBase64Length: imageBase64.length });
 
       const identificationResult = await this.plantImageAnalizeOpenAi.identifyPlants(imageBase64);
-      return JSON.parse(identificationResult);
+      const parsedResult = JSON.parse(identificationResult);
+      this.logger.info('Plant identification completed', { parsedResult });
+      return parsedResult;
     } catch (error) {
       this.logger.error('Error in IdentifyPlanUseCase execute:', { error });
       throw error;
