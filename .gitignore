@@ -4,6 +4,7 @@
 node_modules
 .dist/
 volume/
+!commitlint.config.js
 
 # CDK asset staging directory
 .cdk.staging
