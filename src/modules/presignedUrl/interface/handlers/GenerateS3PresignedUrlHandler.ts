@@ -1,10 +1,10 @@
 import 'reflect-metadata';
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2, Context } from 'aws-lambda';
-import { container } from './config/container';
-import { types } from './config/types';
-import ILogger from '../../core/utils/ILogger';
+import { container } from '../../config/container';
+import { types } from '../../config/types';
+import ILogger from '../../../../core/utils/ILogger';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import Environment from '../../core/utils/Environment';
+import Environment from '../../../../core/utils/Environment';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 const logger: ILogger = container.get(types.Logger);
@@ -28,10 +28,10 @@ export const handler = async (event: APIGatewayProxyEventV2, context: Context): 
 
   try {
     const {
-      BUCKET_NAME = '',
+      S3_BUCKET_NAME = '',
       KEY_PREFIX = '',
       PRESIGN_EXPIRES_SECONDS = '60',
-      ALLOWED_MIME_TYPES = 'image/jpeg,image/png,application/pdf',
+      ALLOWED_MIME_TYPES = 'image/jpeg,image/jpg',
     } = Environment;
 
     const allowed = new Set(
@@ -62,7 +62,7 @@ export const handler = async (event: APIGatewayProxyEventV2, context: Context): 
     const key = `${KEY_PREFIX}${Date.now()}-${clean}`;
 
     const cmd = new PutObjectCommand({
-      Bucket: BUCKET_NAME,
+      Bucket: S3_BUCKET_NAME,
       Key: key,
       ContentType: contentType,
       // Optional: server-side encryption and tagging examples
@@ -71,8 +71,9 @@ export const handler = async (event: APIGatewayProxyEventV2, context: Context): 
     });
 
     const expiresIn = parseInt(PRESIGN_EXPIRES_SECONDS, 10) || 60;
-    const url = await getSignedUrl(s3, cmd, { expiresIn });
 
+    const url = await getSignedUrl(s3, cmd, { expiresIn });
+    logger.info('Generated presigned URL', { key, url });
     return {
       statusCode: 200,
       headers: {
@@ -80,7 +81,7 @@ export const handler = async (event: APIGatewayProxyEventV2, context: Context): 
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': '*',
       },
-      body: JSON.stringify(url),
+      body: JSON.stringify({ url }),
     };
   } catch (err: any) {
     console.error(err);

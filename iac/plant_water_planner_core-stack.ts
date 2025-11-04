@@ -7,6 +7,7 @@ import IdentifyPlantLambda from './lambda/IdentifyPlantLambda';
 import Environment from './core/Environment';
 import { Bucket } from 'aws-cdk-lib/aws-s3';
 import PlantWaterPlannerBucket from './s3/PlantWaterPlannerBucket';
+import GenerateS3PresignedUrlLambda from './lambda/GenerateS3PresignedUrlLambda';
 
 export class PlantWaterPlannerCoreStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -37,6 +38,12 @@ export class PlantWaterPlannerCoreStack extends cdk.Stack {
       role,
       api,
       bucket,
+    });
+
+    new GenerateS3PresignedUrlLambda(this, 'GenerateS3PresginedUrlLambda', {
+      role,
+      bucket,
+      api,
     });
   }
 }

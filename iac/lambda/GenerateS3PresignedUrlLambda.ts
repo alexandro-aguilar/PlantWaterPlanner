@@ -6,13 +6,16 @@ import { resolve } from 'path';
 import { Duration } from 'aws-cdk-lib';
 import Environment from '../core/Environment';
 import { Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
+import { HttpMethod, HttpRoute, HttpRouteKey } from 'aws-cdk-lib/aws-apigatewayv2';
 
-export default class GenerateS3PresginedUrl extends BaseLambdaFunction {
+export default class GenerateS3PresignedUrlLambda extends BaseLambdaFunction {
   constructor(scope: Construct, id: string, props: GeneratePlanLambdaProps) {
     super(scope, id, {
+      functionName: id,
       runtime: Runtime.NODEJS_22_X,
-      handler: 'IdentifyPlantHandler.handler',
-      code: resolve(__dirname, '../../.dist/src/modules/plan/interface/handlers'),
+      handler: 'GenerateS3PresignedUrlHandler.handler',
+      code: resolve(__dirname, '../../.dist/src/modules/presignedUrl/interface/handlers'),
       role: props.role,
       memorySize: 1024,
       timeout: Duration.seconds(60),
@@ -40,5 +43,13 @@ export default class GenerateS3PresginedUrl extends BaseLambdaFunction {
     });
 
     this.role?.attachInlinePolicy(s3AccessPolicy);
+
+    const integration = new HttpLambdaIntegration(`${id}Integration`, this);
+
+    new HttpRoute(scope, `${id}Route`, {
+      httpApi: props.api,
+      routeKey: HttpRouteKey.with('/get-upload-url', HttpMethod.GET),
+      integration,
+    });
   }
 }

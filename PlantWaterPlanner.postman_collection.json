@@ -1,0 +1,246 @@
+{
+  "info": {
+    "_postman_id": "93e0d7e0-54cb-4d68-8c5d-3da08aefc8cb",
+    "name": "Plant Water Planner API",
+    "description": "Postman collection for the Plant Water Planner core HTTP API. It includes requests for generating plant watering plans, identifying plants from S3-stored images, and creating presigned upload URLs.\n\nSet the `baseUrl` collection variable to the deployed API Gateway URL (for example, `https://abc123.execute-api.us-east-1.amazonaws.com`). Update sample payloads as needed before running each request.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Generate S3 Upload URL",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/get-upload-url?filename=plant.jpg&contentType=image/jpeg",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "get-upload-url"
+          ],
+          "query": [
+            {
+              "key": "filename",
+              "value": "plant.jpg",
+              "description": "Desired key for the upload (validated to .jpg or .jpeg)."
+            },
+            {
+              "key": "contentType",
+              "value": "image/jpeg",
+              "description": "MIME type of the file you will upload."
+            }
+          ]
+        },
+        "description": "Generates a presigned S3 PUT URL bound to the configured bucket. Use the returned URL to upload the plant image directly to S3."
+      },
+      "response": [
+        {
+          "name": "Example success",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/get-upload-url?filename=plant.jpg&contentType=image/jpeg",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "get-upload-url"
+              ],
+              "query": [
+                {
+                  "key": "filename",
+                  "value": "plant.jpg"
+                },
+                {
+                  "key": "contentType",
+                  "value": "image/jpeg"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"url\": \"https://your-bucket.s3.amazonaws.com/guest/1715723490123-plant.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&...\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Identify Plant from Image",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"plant\": \"guest/1715723490123-plant.jpg\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "description": "Identifies plants present in an uploaded image. Provide the S3 key returned from the upload step in the `plant` field.",
+        "url": {
+          "raw": "{{baseUrl}}/identify",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "identify"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Example success",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plant\": \"guest/1715723490123-plant.jpg\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/identify",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "identify"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"result\": {\n    \"plants\": [\n      {\n        \"name\": \"Boston Fern\",\n        \"confidence\": 0.94\n      }\n    ]\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Generate Watering Plan",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"plants\": [\n    \"Boston Fern\",\n    \"Snake Plant\"\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "description": "Generates an OpenAI-backed watering schedule for the supplied list of plant names.",
+        "url": {
+          "raw": "{{baseUrl}}/plan",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "plan"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Example success",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"plants\": [\n    \"Boston Fern\",\n    \"Snake Plant\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/plan",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "plan"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"plan\": \"### Weekly Watering Plan\\n\\n- **Boston Fern**: Mist daily and water thoroughly twice a week.\\n- **Snake Plant**: Allow soil to dry completely; water every 14 days.\\n\"\n}"
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://your-api-id.execute-api.us-east-1.amazonaws.com",
+      "type": "string"
+    }
+  ]
+}
