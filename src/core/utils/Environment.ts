@@ -9,6 +9,7 @@ export default class Environment {
   static readonly KEY_PREFIX = process.env.KEY_PREFIX || '';
   static readonly PRESIGN_EXPIRES_SECONDS = process.env.PRESIGN_EXPIRES_SECONDS || '60';
   static readonly ALLOWED_MIME_TYPES = process.env.ALLOWED_MIME_TYPES || 'image/jpeg,image/png,application/pdf';
+  static readonly TMP_KEY_PREFIX = process.env.TMP_KEY_PREFIX || 'tmp/';
 
   // Initialize LocalStack-specific settings
   static {

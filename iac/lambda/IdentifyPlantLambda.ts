@@ -20,6 +20,7 @@ export default class IdentifyPlantLambda extends BaseLambdaFunction {
       memorySize: 1024,
       timeout: Duration.seconds(60),
       environment: {
+        TMP_KEY_PREFIX: 'guest/', //move it to environment file
         POWERTOOLS_SERVICE_NAME: `${id}`,
         OPENAI_API_KEY: Environment.current.OPENAI_API_KEY,
         BUCKET: props.bucket?.bucketName as string,

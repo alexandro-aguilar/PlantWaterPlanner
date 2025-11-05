@@ -29,7 +29,7 @@ export const handler = async (event: APIGatewayProxyEventV2, context: Context): 
   try {
     const {
       S3_BUCKET_NAME = '',
-      KEY_PREFIX = '',
+      TMP_KEY_PREFIX = '',
       PRESIGN_EXPIRES_SECONDS = '60',
       ALLOWED_MIME_TYPES = 'image/jpeg,image/jpg',
     } = Environment;
@@ -59,7 +59,7 @@ export const handler = async (event: APIGatewayProxyEventV2, context: Context): 
     }
 
     // Optional: namespace keys by day/user/ip/etc.
-    const key = `${KEY_PREFIX}${Date.now()}-${clean}`;
+    const key = `${TMP_KEY_PREFIX}${Date.now()}-${clean}`;
 
     const cmd = new PutObjectCommand({
       Bucket: S3_BUCKET_NAME,
@@ -74,25 +74,27 @@ export const handler = async (event: APIGatewayProxyEventV2, context: Context): 
 
     const url = await getSignedUrl(s3, cmd, { expiresIn });
     logger.info('Generated presigned URL', { key, url });
-    return {
-      statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': '*',
-      },
-      body: JSON.stringify({ url }),
-    };
+    return response(200, { url, key });
+    // return {
+    //   statusCode: 200,
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'Access-Control-Allow-Origin': '*',
+    //     'Access-Control-Allow-Headers': '*',
+    //   },
+    //   body: JSON.stringify({ url }),
+    // };
   } catch (err: any) {
     console.error(err);
-    return {
-      statusCode: 500,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': '*',
-      },
-      body: JSON.stringify({ error: 'internal_error' }),
-    };
+    return response(500, { error: 'internal_error' });
+    // return {
+    //   statusCode: 500,
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'Access-Control-Allow-Origin': '*',
+    //     'Access-Control-Allow-Headers': '*',
+    //   },
+    //   body: JSON.stringify({ error: 'internal_error' }),
+    // };
   }
 };

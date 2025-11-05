@@ -22,7 +22,7 @@ export default class GenerateS3PresignedUrlLambda extends BaseLambdaFunction {
       environment: {
         POWERTOOLS_SERVICE_NAME: `${id}`,
         BUCKET: props.bucket?.bucketName as string,
-        KEY_PREFIX: 'guest/',
+        TMP_KEY_PREFIX: 'tmp/',
         PRESIGN_EXPIRES_SECONDS: '60',
         ALLOWED_MIME_TYPES: 'image/jpeg,image/jpg',
         STAGE: Environment.current.STAGE,
