@@ -55,7 +55,7 @@ A CDK-based infrastructure project for managing plant watering schedules. This p
 
 2. **Run transpiler in watch mode for hot-reload and deployment**
    ```bash
-   yarn deploy:local
+   yarn build:local
    ```
 
 3. **Bootstrap CDK for LocalStack** (first time only)

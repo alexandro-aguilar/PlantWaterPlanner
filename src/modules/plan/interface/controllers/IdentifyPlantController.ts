@@ -15,7 +15,7 @@ export default class IdentifyPlantController {
     try {
       const body = JSON.parse(event.body || '{}');
       this.logger.info('body:', { body });
-      const plantPath = body.plant;
+      const plantPath: string = body.plant;
       this.logger.info('Received plantPath:', { plantPath });
       const result = await this.identifyPlantUseCase.execute(plantPath);
       this.logger.info('Identified Plants:', { result });
