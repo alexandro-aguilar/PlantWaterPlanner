@@ -31,13 +31,13 @@ jobs:
       - name: Setup Node
         uses : actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Enable Corepack
         run: corepack enable
 
       - name: Install correct Yarn version
-        run: corepack prepare yarn@4.9.1 --activate
+        run: corepack prepare yarn@4.10.3 --activate
 
       - name: Install dependencies
         run: yarn
