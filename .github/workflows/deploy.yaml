@@ -45,6 +45,9 @@ jobs:
       - name: Install AWS CDK
         run: npm i -g aws-cdk
 
+      - name: Build project
+        run: yarn build
+
       - name: CDK synthetize
         run: cdk synth
 
