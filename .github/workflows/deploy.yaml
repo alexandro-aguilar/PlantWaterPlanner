@@ -4,44 +4,64 @@ on:
   push:
     branches:
       - main
-   
+ 
 permissions:
   id-token: write   # required for OIDC
   contents: read    # allow reading the repo
 
+env:
+  NODE_VERSION: 22
+  YARN_VERSION: 4.10.3
+  ARTIFACT_NAME: cdk-out
+
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
-    environment:
-      name: dev
-
-    env:
-      STAGE: dev
-
     steps:
-      - name: Configure AWS credentials via OIDC
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-          aws-region: ${{ vars.AWS_REGION }}
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node
-        uses : actions/setup-node@v4
+        uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: Enable Corepack
         run: corepack enable
 
       - name: Install correct Yarn version
-        run: corepack prepare yarn@4.10.3 --activate
+        run: corepack prepare yarn@${{ env.YARN_VERSION }} --activate
 
       - name: Install dependencies
         run: yarn
-          
+
+      - name: Run unit tests
+        run: yarn test --ci
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    env:
+      STAGE: dev
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install correct Yarn version
+        run: corepack prepare yarn@${{ env.YARN_VERSION }} --activate
+
+      - name: Install dependencies
+        run: yarn
+
       - name: Install AWS CDK
         run: npm i -g aws-cdk
 
@@ -51,5 +71,39 @@ jobs:
       - name: CDK synthetize
         run: cdk synth
 
+      - name: Upload CDK output
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: cdk.out
+          if-no-files-found: error
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: dev
+
+    steps:
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install AWS CDK
+        run: npm i -g aws-cdk
+
+      - name: Download CDK output
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: cdk.out
+
       - name: Deploy CDK Stack
-        run: cdk deploy --require-approval never
+        run: cdk deploy --app cdk.out --require-approval never
