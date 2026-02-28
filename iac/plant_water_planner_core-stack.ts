@@ -21,40 +21,40 @@ export class PlantWaterPlannerCoreStack extends cdk.Stack {
 
     const bucket = new PlantWaterPlannerBucket(this, Environment.current.S3_BUCKET_NAME);
 
-    const api = new CoreApiGateway(this, 'CoreApiGateway');
+    const api = new CoreApiGateway(this, `PlantWaterPlannerCoreApiGateway-${Environment.current.STAGE}`);
 
-    const role = new Role(this, 'GeneratePlanLambdaRole', {
-      roleName: 'GeneratePlanLambdaRole',
+    const role = new Role(this, `GeneratePlanLambdaRole-${Environment.current.STAGE}`, {
+      roleName: `GeneratePlanLambdaRole-${Environment.current.STAGE}`,
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
       managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')],
     });
 
-    new GeneratePlanLambda(this, 'GeneratePlanLambda', {
+    new GeneratePlanLambda(this, `GeneratePlanLambda-${Environment.current.STAGE}`, {
       role,
       api,
     });
 
-    new IdentifyPlantLambda(this, 'IdentifyPlantLambda', {
+    new IdentifyPlantLambda(this, `IdentifyPlantLambda-${Environment.current.STAGE}`, {
       role,
       api,
       bucket,
     });
 
-    new GenerateS3PresignedUrlLambda(this, 'GenerateS3PresginedUrlLambda', {
+    new GenerateS3PresignedUrlLambda(this, `GenerateS3PresignedUrlLambda-${Environment.current.STAGE}`, {
       role,
       bucket,
       api,
     });
 
-    new cdk.CfnOutput(this, 'ApiGatewayUrl', {
+    new cdk.CfnOutput(this, `ApiGatewayUrl-${Environment.current.STAGE}`, {
       value: api.apiEndpoint ?? 'unknown-endpoint',
-      exportName: `${id}-ApiGatewayUrl`,
+      exportName: `${id}-ApiGatewayUrl-${Environment.current.STAGE}`,
       description: 'HTTP API endpoint for the core API gateway',
     });
 
-    new cdk.CfnOutput(this, 'S3BucketName', {
+    new cdk.CfnOutput(this, `S3BucketName-${Environment.current.STAGE}`, {
       value: bucket.bucketName,
-      exportName: `${id}-S3BucketName`,
+      exportName: `${id}-S3BucketName-${Environment.current.STAGE}`,
       description: 'Primary S3 bucket name for the Plant Water Planner',
     });
   }

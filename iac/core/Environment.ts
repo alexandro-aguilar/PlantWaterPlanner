@@ -10,7 +10,7 @@ export default class Environment {
     this.STAGE = (process.env.STAGE || 'local').toLowerCase();
     this.PROJECT_NAME = process.env.PROJECT_NAME || 'PlantWaterPlanner';
     this.OPENAI_API_KEY = process.env.OPENAI_API_KEY || '';
-    this.S3_BUCKET_NAME = process.env.S3_BUCKET_NAME || `plant-water-planner-bucket-${this.STAGE}`;
+    this.S3_BUCKET_NAME = process.env.S3_BUCKET_NAME || 'plant-water-planner-bucket';
   }
 
   public static getInstance(): Environment {
