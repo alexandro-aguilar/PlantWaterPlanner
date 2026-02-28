@@ -45,5 +45,17 @@ export class PlantWaterPlannerCoreStack extends cdk.Stack {
       bucket,
       api,
     });
+
+    new cdk.CfnOutput(this, 'ApiGatewayUrl', {
+      value: api.apiEndpoint ?? 'unknown-endpoint',
+      exportName: `${id}-ApiGatewayUrl`,
+      description: 'HTTP API endpoint for the core API gateway',
+    });
+
+    new cdk.CfnOutput(this, 'S3BucketName', {
+      value: bucket.bucketName,
+      exportName: `${id}-S3BucketName`,
+      description: 'Primary S3 bucket name for the Plant Water Planner',
+    });
   }
 }
