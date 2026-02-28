@@ -12,15 +12,15 @@ import { HttpMethod, HttpRoute, HttpRouteKey } from 'aws-cdk-lib/aws-apigatewayv
 export default class GenerateS3PresignedUrlLambda extends BaseLambdaFunction {
   constructor(scope: Construct, id: string, props: GeneratePlanLambdaProps) {
     super(scope, id, {
-      functionName: id,
-      runtime: Runtime.NODEJS_22_X,
+      functionName: `${id}-${Environment.current.STAGE}`,
+      runtime: Runtime.NODEJS_24_X,
       handler: 'GenerateS3PresignedUrlHandler.handler',
       code: resolve(__dirname, '../../.dist/src/modules/presignedUrl/interface/handlers'),
       role: props.role,
       memorySize: 1024,
       timeout: Duration.seconds(60),
       environment: {
-        POWERTOOLS_SERVICE_NAME: `${id}`,
+        POWERTOOLS_SERVICE_NAME: `${id}-${Environment.current.STAGE}`,
         BUCKET: props.bucket?.bucketName as string,
         TMP_KEY_PREFIX: 'tmp/',
         PRESIGN_EXPIRES_SECONDS: '60',

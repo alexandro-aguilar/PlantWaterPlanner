@@ -1,5 +1,5 @@
 import Environment from './Environment';
-import { FunctionProps, Function, Code, Tracing } from 'aws-cdk-lib/aws-lambda';
+import { FunctionProps, Function, Code, Tracing, Architecture } from 'aws-cdk-lib/aws-lambda';
 import { Bucket } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 
@@ -11,6 +11,7 @@ export default abstract class BaseLambdaFunction extends Function {
   constructor(scope: Construct, id: string, props: BaseLambdaFunctionProps) {
     super(scope, id, {
       ...props,
+      architecture: Architecture.ARM_64,
       code:
         Environment.current.STAGE === 'local'
           ? Code.fromBucket(Bucket.fromBucketName(scope, `${id}HotReloadBucket`, 'hot-reload'), props.code as string)

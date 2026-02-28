@@ -1,6 +1,6 @@
 import { Construct } from 'constructs';
 import BaseLambdaFunction from '../core/BaseLambdaFunction';
-import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Architecture, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { resolve } from 'path';
 import { Duration } from 'aws-cdk-lib';
 import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
@@ -11,15 +11,15 @@ import Environment from '../core/Environment';
 export default class GeneratePlanLambda extends BaseLambdaFunction {
   constructor(scope: Construct, id: string, props: GeneratePlanLambdaProps) {
     super(scope, id, {
-      functionName: id,
-      runtime: Runtime.NODEJS_22_X,
+      functionName: `${id}-${Environment.current.STAGE}`,
+      runtime: Runtime.NODEJS_24_X,
       handler: 'GeneratePlanHandler.handler',
       code: resolve(__dirname, '../../.dist/src/modules/plan/interface/handlers'),
       role: props.role,
       memorySize: 1024,
       timeout: Duration.seconds(30),
       environment: {
-        POWERTOOLS_SERVICE_NAME: `${id}`,
+        POWERTOOLS_SERVICE_NAME: `${id}-${Environment.current.STAGE}`,
         OPENAI_API_KEY: Environment.current.OPENAI_API_KEY,
       },
     });
