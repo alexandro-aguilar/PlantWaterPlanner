@@ -21,7 +21,7 @@ export default class GenerateS3PresignedUrlLambda extends BaseLambdaFunction {
       timeout: Duration.seconds(60),
       environment: {
         POWERTOOLS_SERVICE_NAME: `${id}-${Environment.current.STAGE}`,
-        BUCKET: props.bucket?.bucketName as string,
+        S3_BUCKET_NAME: props.bucket?.bucketName as string,
         TMP_KEY_PREFIX: 'tmp/',
         PRESIGN_EXPIRES_SECONDS: '60',
         ALLOWED_MIME_TYPES: 'image/jpeg,image/jpg',

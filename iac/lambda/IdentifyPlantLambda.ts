@@ -23,7 +23,7 @@ export default class IdentifyPlantLambda extends BaseLambdaFunction {
         TMP_KEY_PREFIX: 'guest/', //move it to environment file
         POWERTOOLS_SERVICE_NAME: `${id}-${Environment.current.STAGE}`,
         OPENAI_API_KEY: Environment.current.OPENAI_API_KEY,
-        BUCKET: props.bucket?.bucketName as string,
+        S3_BUCKET_NAME: props.bucket?.bucketName as string,
         STAGE: Environment.current.STAGE,
         // LocalStack-specific environment variables
         ...(Environment.current.STAGE === 'local' && {

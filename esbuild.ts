@@ -1,5 +1,5 @@
 import { build, context } from 'esbuild';
-// import { nodeExternalsPlugin } from 'esbuild-node-externals';
+import { nodeExternalsPlugin } from 'esbuild-node-externals';
 import alias from 'esbuild-plugin-alias';
 import { resolve } from 'path';
 import fg from 'fast-glob';
@@ -23,11 +23,9 @@ async function main() {
     target: 'node22',
     outbase: 'src',
     outdir: '.dist/src',
-    minify: false,
     sourcemap: isWatchMode,
     logLevel: 'info' as LogLevel,
     plugins: [
-      // nodeExternalsPlugin({ packagePath: './package.json' }),
       alias({
         '@src': resolve(__dirname, 'src'),
         '@test': resolve(__dirname, 'test'),
@@ -41,7 +39,7 @@ async function main() {
       const ctx = await context(buildOptions);
       await ctx.watch();
     } else {
-      await build(buildOptions);
+      await build({ ...buildOptions, external: ['@aws-sdk'], minify: true });
       console.log('✅ TypeScript build successful');
     }
   } catch (error) {
