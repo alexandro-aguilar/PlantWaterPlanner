@@ -19,7 +19,10 @@ export class PlantWaterPlannerCoreStack extends cdk.Stack {
       });
     }
 
-    const bucket = new PlantWaterPlannerBucket(this, Environment.current.S3_BUCKET_NAME);
+    const bucket = new PlantWaterPlannerBucket(
+      this,
+      `${Environment.current.S3_BUCKET_NAME}-${Environment.current.STAGE}`
+    );
 
     const api = new CoreApiGateway(this, `PlantWaterPlannerCoreApiGateway-${Environment.current.STAGE}`);
 
