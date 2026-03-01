@@ -12,7 +12,7 @@ import { Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 export default class IdentifyPlantLambda extends BaseLambdaFunction {
   constructor(scope: Construct, id: string, props: GeneratePlanLambdaProps) {
     super(scope, id, {
-      functionName: `${id}-${Environment.current.STAGE}`,
+      functionName: `${id}`,
       runtime: Runtime.NODEJS_24_X,
       handler: 'IdentifyPlantHandler.handler',
       code: resolve(__dirname, '../../.dist/src/modules/plan/interface/handlers'),
@@ -21,7 +21,7 @@ export default class IdentifyPlantLambda extends BaseLambdaFunction {
       timeout: Duration.seconds(60),
       environment: {
         TMP_KEY_PREFIX: 'guest/', //move it to environment file
-        POWERTOOLS_SERVICE_NAME: `${id}-${Environment.current.STAGE}`,
+        POWERTOOLS_SERVICE_NAME: `${id}`,
         OPENAI_API_KEY: Environment.current.OPENAI_API_KEY,
         S3_BUCKET_NAME: props.bucket?.bucketName as string,
         STAGE: Environment.current.STAGE,

@@ -23,7 +23,13 @@ describe('GenerateS3PresignedUrlHandler', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    process.env = { ...originalEnv, S3_BUCKET_NAME: 'bucket', TMP_KEY_PREFIX: 'tmp/', PRESIGN_EXPIRES_SECONDS: '60', ALLOWED_MIME_TYPES: 'image/jpeg,image/jpg' };
+    process.env = {
+      ...originalEnv,
+      S3_BUCKET_NAME: 'bucket',
+      TMP_KEY_PREFIX: 'tmp/',
+      PRESIGN_EXPIRES_SECONDS: '60',
+      ALLOWED_MIME_TYPES: 'image/jpeg,image/jpg',
+    };
     jest.resetModules();
   });
 
@@ -33,7 +39,8 @@ describe('GenerateS3PresignedUrlHandler', () => {
 
   it('given missing filename when requesting URL then returns 400', async () => {
     // Given
-    const { handler } = await import('../../../../../../src/modules/presignedUrl/interface/handlers/GenerateS3PresignedUrlHandler');
+    const { handler } =
+      await import('../../../../../../src/modules/presignedUrl/interface/handlers/GenerateS3PresignedUrlHandler');
     const event: any = { queryStringParameters: { contentType: 'image/jpeg' } };
 
     // When
@@ -45,7 +52,8 @@ describe('GenerateS3PresignedUrlHandler', () => {
 
   it('given unsupported content type when requesting URL then returns 415', async () => {
     // Given
-    const { handler } = await import('../../../../../../src/modules/presignedUrl/interface/handlers/GenerateS3PresignedUrlHandler');
+    const { handler } =
+      await import('../../../../../../src/modules/presignedUrl/interface/handlers/GenerateS3PresignedUrlHandler');
     const event: any = { queryStringParameters: { filename: 'photo.jpg', contentType: 'text/plain' } };
 
     // When
@@ -58,7 +66,8 @@ describe('GenerateS3PresignedUrlHandler', () => {
   it('given valid request when requesting URL then returns presigned url', async () => {
     // Given
     getSignedUrl.mockResolvedValue('signed-url');
-    const { handler } = await import('../../../../../../src/modules/presignedUrl/interface/handlers/GenerateS3PresignedUrlHandler');
+    const { handler } =
+      await import('../../../../../../src/modules/presignedUrl/interface/handlers/GenerateS3PresignedUrlHandler');
     const event: any = { queryStringParameters: { filename: 'photo.jpg', contentType: 'image/jpeg' } };
 
     // When

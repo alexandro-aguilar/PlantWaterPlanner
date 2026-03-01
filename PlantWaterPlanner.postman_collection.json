@@ -18,12 +18,8 @@
         ],
         "url": {
           "raw": "{{baseUrl}}/get-upload-url?filename=plant.jpg&contentType=image/jpeg",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "get-upload-url"
-          ],
+          "host": ["{{baseUrl}}"],
+          "path": ["get-upload-url"],
           "query": [
             {
               "key": "filename",
@@ -52,12 +48,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/get-upload-url?filename=plant.jpg&contentType=image/jpeg",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "get-upload-url"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["get-upload-url"],
               "query": [
                 {
                   "key": "filename",
@@ -109,12 +101,8 @@
         "description": "Identifies plants present in an uploaded image. Provide the S3 key returned from the upload step in the `plant` field.",
         "url": {
           "raw": "{{baseUrl}}/identify",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "identify"
-          ]
+          "host": ["{{baseUrl}}"],
+          "path": ["identify"]
         }
       },
       "response": [
@@ -138,12 +126,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/identify",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "identify"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["identify"]
             }
           },
           "status": "OK",
@@ -185,12 +169,8 @@
         "description": "Generates an OpenAI-backed watering schedule for the supplied list of plant names.",
         "url": {
           "raw": "{{baseUrl}}/plan",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "plan"
-          ]
+          "host": ["{{baseUrl}}"],
+          "path": ["plan"]
         }
       },
       "response": [
@@ -214,12 +194,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/plan",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "plan"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["plan"]
             }
           },
           "status": "OK",

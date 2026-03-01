@@ -1,3 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
+set -e
 
 ./node_modules/.bin/commitlint --edit $1

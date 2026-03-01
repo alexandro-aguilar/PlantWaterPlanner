@@ -37,7 +37,9 @@ describe('IdentifyPlantUseCase', () => {
     expect(s3Service.downloadFileAsBase64).toHaveBeenCalledWith(key);
     expect(plantImageAnalizeOpenAi.identifyPlants).toHaveBeenCalledWith(encoded);
     expect(result).toEqual({ plant: { name: 'Fern' } });
-    expect(logger.info).toHaveBeenCalledWith('Plant identification completed', { parsedResult: { plant: { name: 'Fern' } } });
+    expect(logger.info).toHaveBeenCalledWith('Plant identification completed', {
+      parsedResult: { plant: { name: 'Fern' } },
+    });
   });
 
   it('given downstream failure when executing then logs error and rethrows', async () => {

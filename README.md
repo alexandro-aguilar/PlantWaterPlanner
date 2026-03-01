@@ -14,12 +14,14 @@ A CDK-based infrastructure project for managing plant watering schedules. This p
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd PlantWaterPlannerCore
    ```
 
 2. **Install dependencies**
+
    ```bash
    yarn install
    ```
@@ -34,31 +36,35 @@ A CDK-based infrastructure project for managing plant watering schedules. This p
 
 ### Available Scripts
 
-| Command | Description |
-|---------|-------------|
-| `yarn build` | Compile TypeScript to JavaScript using esbuild |
-| `yarn build:local` | Build in watch mode for local development |
-| `yarn test` | Run Jest unit tests |
-| `yarn lint` | Run ESLint to check code quality |
-| `yarn lint:fix` | Auto-fix ESLint issues |
-| `yarn format` | Format code using Prettier |
+| Command            | Description                                    |
+| ------------------ | ---------------------------------------------- |
+| `yarn build`       | Compile TypeScript to JavaScript using esbuild |
+| `yarn build:local` | Build in watch mode for local development      |
+| `yarn test`        | Run Jest unit tests                            |
+| `yarn lint`        | Run ESLint to check code quality               |
+| `yarn lint:fix`    | Auto-fix ESLint issues                         |
+| `yarn format`      | Format code using Prettier                     |
 
 ### Local Development
 
 1. **Start LocalStack services**
+
    ```bash
    yarn localstack
    ```
+
    This command will:
    - Stop and remove any existing LocalStack containers
    - Start LocalStack and PostgreSQL using Docker Compose
 
 2. **Run transpiler in watch mode for hot-reload and deployment**
+
    ```bash
    yarn build:local
    ```
 
 3. **Bootstrap CDK for LocalStack** (first time only)
+
    ```bash
    yarn bootstrap:local
    ```
@@ -71,11 +77,13 @@ A CDK-based infrastructure project for managing plant watering schedules. This p
 ### Testing
 
 Run the test suite:
+
 ```bash
 yarn test
 ```
 
 Tests are configured with Jest and include:
+
 - Unit tests for your CDK constructs
 - Integration tests for Lambda functions
 - Infrastructure tests
@@ -87,6 +95,7 @@ Tests are configured with Jest and include:
 For local development and testing:
 
 1. **Start LocalStack**
+
    ```bash
    yarn localstack
    ```
@@ -101,11 +110,13 @@ For local development and testing:
 For production deployment to AWS:
 
 1. **Configure AWS credentials**
+
    ```bash
    aws configure
    ```
 
 2. **Bootstrap CDK** (first time only)
+
    ```bash
    yarn cdk bootstrap
    ```
@@ -118,11 +129,13 @@ For production deployment to AWS:
 ### Other CDK Commands
 
 - **Synthesize CloudFormation template**
+
   ```bash
   yarn cdk synth
   ```
 
 - **Compare deployed stack with current state**
+
   ```bash
   yarn cdk diff
   ```
@@ -180,19 +193,19 @@ This project follows [Conventional Commits](https://www.conventionalcommits.org/
 
 ### Commit Types
 
-| Type | Description | When to Use |
-|------|-------------|-------------|
-| **feat** | A new feature | Adding new functionality for users |
-| **fix** | A bug fix | Fixing a defect that affects users |
-| **docs** | Documentation only changes | README, comments, documentation sites |
-| **style** | Code style changes | Formatting, semicolons, whitespace (no logic changes) |
+| Type         | Description                                         | When to Use                                                     |
+| ------------ | --------------------------------------------------- | --------------------------------------------------------------- |
+| **feat**     | A new feature                                       | Adding new functionality for users                              |
+| **fix**      | A bug fix                                           | Fixing a defect that affects users                              |
+| **docs**     | Documentation only changes                          | README, comments, documentation sites                           |
+| **style**    | Code style changes                                  | Formatting, semicolons, whitespace (no logic changes)           |
 | **refactor** | Code changes that neither fix bugs nor add features | Improving code structure, performance without changing behavior |
-| **perf** | Performance improvements | Changes that improve performance |
-| **test** | Adding or updating tests | Unit tests, integration tests, test utilities |
-| **build** | Build system or external dependencies | webpack, npm, yarn, package.json changes |
-| **ci** | CI/CD configuration changes | GitHub Actions, CircleCI, deployment scripts |
-| **chore** | Other changes | Tooling, maintenance tasks, dependency updates |
-| **revert** | Reverting a previous commit | Undoing previous changes |
+| **perf**     | Performance improvements                            | Changes that improve performance                                |
+| **test**     | Adding or updating tests                            | Unit tests, integration tests, test utilities                   |
+| **build**    | Build system or external dependencies               | webpack, npm, yarn, package.json changes                        |
+| **ci**       | CI/CD configuration changes                         | GitHub Actions, CircleCI, deployment scripts                    |
+| **chore**    | Other changes                                       | Tooling, maintenance tasks, dependency updates                  |
+| **revert**   | Reverting a previous commit                         | Undoing previous changes                                        |
 
 ### Scope Guidelines
 
@@ -227,6 +240,7 @@ feat(api)!: update user authentication endpoint
 ### Examples
 
 #### Simple Commits
+
 ```bash
 feat(auth): add user authentication system
 fix(api): resolve timeout issue in plant data retrieval
@@ -239,6 +253,7 @@ perf(lambda): optimize plant data processing algorithm
 ```
 
 #### Commits with Body
+
 ```bash
 feat(api): add plant watering schedule endpoints
 
@@ -249,6 +264,7 @@ Closes #123
 ```
 
 #### Breaking Change Examples
+
 ```bash
 feat(api)!: update plant model structure
 
@@ -269,6 +285,7 @@ Existing deployments may need manual intervention.
 ### Commit Message Best Practices
 
 #### Do ✅
+
 - Use imperative mood: "add feature" not "added feature" or "adding feature"
 - Keep the first line under 50 characters
 - Capitalize the first letter of the description
@@ -277,6 +294,7 @@ Existing deployments may need manual intervention.
 - Reference issues and pull requests when relevant
 
 #### Don't ❌
+
 - Don't use vague descriptions: "fix stuff", "update code", "changes"
 - Don't include file names unless necessary
 - Don't use past tense: "fixed bug" should be "fix bug"
@@ -287,19 +305,25 @@ Existing deployments may need manual intervention.
 This project uses the following tools to enforce conventional commits:
 
 #### Commitlint Configuration
+
 Located in `commitlint.config.js`:
+
 ```javascript
 module.exports = { extends: ['@commitlint/config-conventional'] };
 ```
 
 #### Husky Git Hooks
+
 Pre-commit hooks automatically:
+
 - Lint and format staged files
 - Run relevant tests
 - Validate commit message format
 
 #### Lint-Staged Configuration
+
 Located in `.lintstagedrc.json`:
+
 ```json
 {
   "**/*.ts": ["yarn lint:fix", "yarn format"],
@@ -319,14 +343,14 @@ When you commit using conventional commits, the following happens automatically:
 
 ### Common Scenarios
 
-| Scenario | Commit Type | Example |
-|----------|-------------|---------|
-| New Lambda function | `feat(lambda)` | `feat(lambda): add plant care reminder function` |
-| Bug in CDK stack | `fix(iac)` | `fix(iac): correct IAM permissions for DynamoDB` |
-| Update README | `docs` | `docs: add API endpoint documentation` |
-| Dependency update | `chore(deps)` | `chore(deps): bump aws-cdk to v2.220.0` |
-| Code cleanup | `refactor` | `refactor: simplify error handling logic` |
-| New test cases | `test` | `test(api): add unit tests for validation logic` |
+| Scenario                | Commit Type    | Example                                             |
+| ----------------------- | -------------- | --------------------------------------------------- |
+| New Lambda function     | `feat(lambda)` | `feat(lambda): add plant care reminder function`    |
+| Bug in CDK stack        | `fix(iac)`     | `fix(iac): correct IAM permissions for DynamoDB`    |
+| Update README           | `docs`         | `docs: add API endpoint documentation`              |
+| Dependency update       | `chore(deps)`  | `chore(deps): bump aws-cdk to v2.220.0`             |
+| Code cleanup            | `refactor`     | `refactor: simplify error handling logic`           |
+| New test cases          | `test`         | `test(api): add unit tests for validation logic`    |
 | Performance improvement | `perf(lambda)` | `perf(lambda): optimize database query performance` |
 
 ### Pre-commit Hooks

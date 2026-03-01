@@ -20,4 +20,3 @@ networks:
   localnet:
     name: localnet
     driver: bridge
-

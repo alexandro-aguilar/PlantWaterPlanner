@@ -55,7 +55,7 @@ export default [
       'no-console': [
         'warn',
         {
-          allow: ['warn', 'error'],
+          allow: ['warn', 'error', 'debug', 'info'],
         },
       ],
       '@typescript-eslint/ban-ts-comment': 'warn',
