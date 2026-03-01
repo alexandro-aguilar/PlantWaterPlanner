@@ -11,3 +11,5 @@ volume/
 cdk.out
 
 .env
+
+coverage/
